@@ -38,13 +38,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore HoneyDrunk.Vault.Rotation.sln
+        run: dotnet restore HoneyDrunk.Vault.Rotation.slnx
 
       - name: Build
-        run: dotnet build HoneyDrunk.Vault.Rotation.sln -c Release --no-restore
+        run: dotnet build HoneyDrunk.Vault.Rotation.slnx -c Release --no-restore
 
       - name: Test
-        run: dotnet test HoneyDrunk.Vault.Rotation.sln -c Release --no-build
+        run: dotnet test HoneyDrunk.Vault.Rotation.slnx -c Release --no-build
 
       - name: Publish
         run: |

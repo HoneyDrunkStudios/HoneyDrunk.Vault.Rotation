@@ -23,9 +23,9 @@ HoneyDrunk.Vault.Rotation owns scheduled rotation orchestration for provider sec
 ## Local Development
 
 ```powershell
-dotnet restore HoneyDrunk.Vault.Rotation.sln
-dotnet build HoneyDrunk.Vault.Rotation.sln -c Release
-dotnet test HoneyDrunk.Vault.Rotation.sln -c Release --no-build
+dotnet restore HoneyDrunk.Vault.Rotation.slnx
+dotnet build HoneyDrunk.Vault.Rotation.slnx -c Release
+dotnet test HoneyDrunk.Vault.Rotation.slnx -c Release --no-build
 ```
 
 To run the Function host locally:

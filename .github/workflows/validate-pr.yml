@@ -26,7 +26,7 @@ jobs:
       configuration: 'Release'
       runs-on: 'ubuntu-latest'
       working-directory: '.'
-      project-path: 'HoneyDrunk.Vault.Rotation.sln'
+      project-path: 'HoneyDrunk.Vault.Rotation.slnx'
       enable-secret-scan: true
       enable-accessibility-check: false
       post-pr-summary: true

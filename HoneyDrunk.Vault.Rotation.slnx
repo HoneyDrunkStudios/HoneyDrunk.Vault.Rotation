@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HoneyDrunk.Vault.Rotation.Abstractions/HoneyDrunk.Vault.Rotation.Abstractions.csproj" />
+    <Project Path="src/HoneyDrunk.Vault.Rotation.Providers/HoneyDrunk.Vault.Rotation.Providers.csproj" />
+    <Project Path="src/HoneyDrunk.Vault.Rotation/HoneyDrunk.Vault.Rotation.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HoneyDrunk.Vault.Rotation.Canary/HoneyDrunk.Vault.Rotation.Canary.csproj" />
+    <Project Path="tests/HoneyDrunk.Vault.Rotation.Tests/HoneyDrunk.Vault.Rotation.Tests.csproj" />
+  </Folder>
+</Solution>
