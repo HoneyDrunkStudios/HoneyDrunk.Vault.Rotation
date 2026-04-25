@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <Version>0.1.0</Version>
+    <Description>Azure Function App host for Tier 2 third-party secret rotation in the HoneyDrunk Grid.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+    <PackageReference Include="HoneyDrunk.Kernel" Version="0.4.0" />
+    <PackageReference Include="HoneyDrunk.Vault" Version="0.2.0" />
+    <PackageReference Include="HoneyDrunk.Vault.Providers.AzureKeyVault" Version="0.2.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.51.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.3.1" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HoneyDrunk.Vault.Rotation.Abstractions\HoneyDrunk.Vault.Rotation.Abstractions.csproj" />
+    <ProjectReference Include="..\HoneyDrunk.Vault.Rotation.Providers\HoneyDrunk.Vault.Rotation.Providers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
