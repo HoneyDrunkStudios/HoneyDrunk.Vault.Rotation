@@ -88,6 +88,7 @@ jobs:
 
   deploy:
     name: Deploy to ${{ inputs.environment || 'staging' }}
+    if: ${{ needs.resolve.outputs.functions-app != '' && needs.resolve.outputs.resource-group != '' && needs.resolve.outputs.keyvault-name != '' && vars.AZURE_CLIENT_ID != '' && vars.AZURE_TENANT_ID != '' && vars.AZURE_SUBSCRIPTION_ID != '' }}
     needs: [resolve, deploy-gate]
     uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/job-deploy-function.yml@main
     with:
