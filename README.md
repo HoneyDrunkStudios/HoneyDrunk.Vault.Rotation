@@ -31,7 +31,7 @@ dotnet test HoneyDrunk.Vault.Rotation.slnx -c Release --no-build
 To run the Function host locally:
 
 ```powershell
-cd src/HoneyDrunk.Vault.Rotation
+cd HoneyDrunk.Vault.Rotation
 func start
 ```
 
