@@ -6,7 +6,7 @@ HoneyDrunk.Vault.Rotation owns scheduled rotation orchestration for provider sec
 
 ## Grid Placement
 
-- **Node:** `honeydrunk-vault-rotation`
+- **Node:** `honeydrunk-vault-rotation` via `WellKnownNodes.Core.VaultRotation` unless `HONEYDRUNK_NODE_ID` / `Grid:NodeId` overrides it
 - **Service token:** `vaultrot`
 - **Tier:** ADR-0006 Tier 2, third-party rotation within 90 days
 - **Vault:** `kv-hd-vaultrot-{env}`
@@ -17,6 +17,8 @@ HoneyDrunk.Vault.Rotation owns scheduled rotation orchestration for provider sec
 
 - `vaultrot` is 8 characters, which satisfies the 13-character service-name budget from ADR-0005.
 - The Function App uses OIDC for CI deployment authentication. Service-principal client secrets are not used.
+- Every scheduled rotation execution establishes a Kernel Grid/Operation context before provider work begins.
+- Internal system rotation work uses Kernel internal tenant context by default.
 - Rotation code must write new secret versions and consumers must continue resolving latest versions through `ISecretStore`.
 - This Node does not duplicate Azure-native Key Vault rotation.
 
