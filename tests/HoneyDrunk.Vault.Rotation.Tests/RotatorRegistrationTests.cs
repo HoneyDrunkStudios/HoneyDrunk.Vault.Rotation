@@ -28,4 +28,44 @@ public sealed class RotatorRegistrationTests
 
         Assert.Equal(["openai", "resend", "twilio"], providerNames);
     }
+
+    /// <summary>
+    /// Verifies that every provider registration keeps the placeholder skipped behavior.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous test operation.</returns>
+    [Fact]
+    public async Task ProviderStubsReturnSkippedPlaceholderResults()
+    {
+        var services = new ServiceCollection();
+        services.AddHoneyDrunkVaultRotators();
+
+        using var provider = services.BuildServiceProvider();
+        var rotators = provider.GetServices<IRotator>().OrderBy(rotator => rotator.ProviderName).ToArray();
+        var context = new RotationContext(
+            "test-provider",
+            "test-vault",
+            "test-secret",
+            DateTimeOffset.UtcNow,
+            "test-correlation");
+
+        var results = new List<RotationResult>();
+        foreach (var rotator in rotators)
+        {
+            results.Add(await rotator.RotateAsync(context with { ProviderName = rotator.ProviderName }, CancellationToken.None));
+        }
+
+        Assert.Collection(
+            results,
+            result => AssertPlaceholderResult(result, "openai", "OpenAI rotation is not implemented in the scaffold."),
+            result => AssertPlaceholderResult(result, "resend", "Resend rotation is not implemented in the scaffold."),
+            result => AssertPlaceholderResult(result, "twilio", "Twilio rotation is not implemented in the scaffold."));
+    }
+
+    private static void AssertPlaceholderResult(RotationResult result, string providerName, string message)
+    {
+        Assert.Equal(providerName, result.ProviderName);
+        Assert.Equal(RotationStatus.Skipped, result.Status);
+        Assert.Equal(message, result.Message);
+        Assert.NotNull(result.CompletedAtUtc);
+    }
 }

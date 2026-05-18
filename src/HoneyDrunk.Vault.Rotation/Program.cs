@@ -16,7 +16,7 @@ var builder = FunctionsApplication.CreateBuilder(args);
 var honeyDrunkBuilder = builder.Services
     .AddHoneyDrunkNode(options =>
     {
-        options.NodeId = new NodeId("honeydrunk-vault-rotation");
+        options.NodeId = ResolveNodeId(builder.Configuration);
         options.SectorId = Sectors.Core;
         options.EnvironmentId = ResolveEnvironment(builder.Configuration);
         options.Version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.1.0";
@@ -39,6 +39,17 @@ honeyDrunkBuilder.Services
     .AddHoneyDrunkVaultRotators();
 
 builder.Build().Run();
+
+static NodeId ResolveNodeId(IConfiguration configuration)
+{
+    var configured =
+        configuration["HONEYDRUNK_NODE_ID"]
+        ?? configuration["Grid:NodeId"];
+
+    return string.IsNullOrWhiteSpace(configured)
+        ? WellKnownNodes.Core.VaultRotation
+        : new NodeId(configured);
+}
 
 static EnvironmentId ResolveEnvironment(IConfiguration configuration)
 {
