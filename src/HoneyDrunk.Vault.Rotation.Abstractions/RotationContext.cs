@@ -5,6 +5,11 @@ namespace HoneyDrunk.Vault.Rotation.Abstractions;
 /// </summary>
 public sealed record RotationContext
 {
+    private string _providerName = string.Empty;
+    private string _targetVaultName = string.Empty;
+    private string _secretName = string.Empty;
+    private string _correlationId = string.Empty;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RotationContext"/> class.
     /// </summary>
@@ -22,11 +27,6 @@ public sealed record RotationContext
         string correlationId,
         IReadOnlyDictionary<string, string>? metadata = null)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(providerName);
-        ArgumentException.ThrowIfNullOrWhiteSpace(targetVaultName);
-        ArgumentException.ThrowIfNullOrWhiteSpace(secretName);
-        ArgumentException.ThrowIfNullOrWhiteSpace(correlationId);
-
         ProviderName = providerName;
         TargetVaultName = targetVaultName;
         SecretName = secretName;
@@ -38,17 +38,41 @@ public sealed record RotationContext
     /// <summary>
     /// Gets the provider to rotate.
     /// </summary>
-    public string ProviderName { get; init; }
+    public string ProviderName
+    {
+        get => _providerName;
+        init
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            _providerName = value;
+        }
+    }
 
     /// <summary>
     /// Gets the destination Key Vault name.
     /// </summary>
-    public string TargetVaultName { get; init; }
+    public string TargetVaultName
+    {
+        get => _targetVaultName;
+        init
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            _targetVaultName = value;
+        }
+    }
 
     /// <summary>
     /// Gets the destination secret name.
     /// </summary>
-    public string SecretName { get; init; }
+    public string SecretName
+    {
+        get => _secretName;
+        init
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            _secretName = value;
+        }
+    }
 
     /// <summary>
     /// Gets the UTC time the rotation was requested.
@@ -58,7 +82,15 @@ public sealed record RotationContext
     /// <summary>
     /// Gets the non-empty cross-system correlation identifier.
     /// </summary>
-    public string CorrelationId { get; init; }
+    public string CorrelationId
+    {
+        get => _correlationId;
+        init
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            _correlationId = value;
+        }
+    }
 
     /// <summary>
     /// Gets additional provider-specific request metadata.
