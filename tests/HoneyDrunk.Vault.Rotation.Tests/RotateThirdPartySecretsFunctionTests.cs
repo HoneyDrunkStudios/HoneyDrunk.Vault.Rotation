@@ -21,22 +21,9 @@ public sealed class RotateThirdPartySecretsFunctionTests
     [Fact]
     public async Task RunCreatesKernelOperationContextForTimerExecution()
     {
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services
-            .AddHoneyDrunkNode(options =>
-            {
-                options.NodeId = WellKnownNodes.Core.VaultRotation;
-                options.SectorId = Sectors.Core;
-                options.EnvironmentId = GridEnvironments.Development;
-                options.StudioId = "honeydrunk";
-                options.Version = "0.1.0";
-            })
-            .Services
+        using var provider = BuildProvider(services => services
             .AddSingleton<CapturingRotator>()
-            .AddSingleton<IRotator>(sp => sp.GetRequiredService<CapturingRotator>());
-
-        using var provider = services.BuildServiceProvider();
+            .AddSingleton<IRotator>(sp => sp.GetRequiredService<CapturingRotator>()));
         var function = new RotateThirdPartySecretsFunction(
             provider.GetRequiredService<IServiceScopeFactory>(),
             NullLogger<RotateThirdPartySecretsFunction>.Instance);
@@ -49,6 +36,60 @@ public sealed class RotateThirdPartySecretsFunctionTests
         Assert.Equal(TenantId.Internal, rotator.TenantId);
         Assert.Equal(WellKnownNodes.Core.VaultRotation.Value, rotator.NodeId);
         Assert.Null(provider.GetRequiredService<IOperationContextAccessor>().Current);
+    }
+
+    /// <summary>
+    /// Verifies that failed rotators fail the active operation and clear operation context.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous test operation.</returns>
+    [Fact]
+    public async Task RunClearsOperationContextWhenRotatorFails()
+    {
+        using var provider = BuildProvider(services => services.AddSingleton<IRotator>(new ThrowingRotator()));
+        var function = new RotateThirdPartySecretsFunction(
+            provider.GetRequiredService<IServiceScopeFactory>(),
+            NullLogger<RotateThirdPartySecretsFunction>.Instance);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => function.Run(null!, CancellationToken.None));
+
+        Assert.Null(provider.GetRequiredService<IOperationContextAccessor>().Current);
+    }
+
+    /// <summary>
+    /// Verifies that cancellation from a rotator fails the operation and preserves cancellation semantics.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous test operation.</returns>
+    [Fact]
+    public async Task RunClearsOperationContextWhenRotatorCancels()
+    {
+        using var cancellationSource = new CancellationTokenSource();
+        using var provider = BuildProvider(services => services.AddSingleton<IRotator>(new CancelingRotator(cancellationSource)));
+        var function = new RotateThirdPartySecretsFunction(
+            provider.GetRequiredService<IServiceScopeFactory>(),
+            NullLogger<RotateThirdPartySecretsFunction>.Instance);
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => function.Run(null!, cancellationSource.Token));
+
+        Assert.True(cancellationSource.IsCancellationRequested);
+        Assert.Null(provider.GetRequiredService<IOperationContextAccessor>().Current);
+    }
+
+    private static ServiceProvider BuildProvider(Action<IServiceCollection> configureRotators)
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services
+            .AddHoneyDrunkNode(options =>
+            {
+                options.NodeId = WellKnownNodes.Core.VaultRotation;
+                options.SectorId = Sectors.Core;
+                options.EnvironmentId = GridEnvironments.Development;
+                options.StudioId = "honeydrunk";
+                options.Version = "0.1.0";
+            });
+
+        configureRotators(services);
+        return services.BuildServiceProvider();
     }
 
     /// <summary>
@@ -88,6 +129,25 @@ public sealed class RotateThirdPartySecretsFunctionTests
             TenantId = operationContext.TenantId;
             NodeId = operationContext.GridContext.NodeId;
             return Task.FromResult(RotationResult.Skipped(ProviderName, "captured"));
+        }
+    }
+
+    private sealed class ThrowingRotator : IRotator
+    {
+        public string ProviderName => "throwing";
+
+        public Task<RotationResult> RotateAsync(RotationContext ctx, CancellationToken ct) =>
+            Task.FromException<RotationResult>(new InvalidOperationException("rotation failed"));
+    }
+
+    private sealed class CancelingRotator(CancellationTokenSource cancellationSource) : IRotator
+    {
+        public string ProviderName => "canceling";
+
+        public Task<RotationResult> RotateAsync(RotationContext ctx, CancellationToken ct)
+        {
+            cancellationSource.Cancel();
+            return Task.FromCanceled<RotationResult>(ct);
         }
     }
 }
