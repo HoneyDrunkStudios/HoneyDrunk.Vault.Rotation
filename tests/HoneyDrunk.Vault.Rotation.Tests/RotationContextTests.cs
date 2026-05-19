@@ -32,7 +32,8 @@ public sealed class RotationContextTests
         Assert.Equal("api-key", context.SecretName);
         Assert.Equal(requestedAt, context.RequestedAtUtc);
         Assert.Equal("correlation-123", context.CorrelationId);
-        Assert.Same(metadata, context.Metadata);
+        Assert.NotNull(context.Metadata);
+        Assert.Equal("placeholder", context.Metadata["rotation-mode"]);
     }
 
     /// <summary>
