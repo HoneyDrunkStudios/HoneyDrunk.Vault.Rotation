@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Internal
+
+- Backfilled test coverage above the Grid PR coverage gate floor and seeded the coverage baseline ratchet artifact.
+
 ## [0.1.0] - 2026-04-25
 
 ### Added

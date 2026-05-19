@@ -8,6 +8,34 @@ namespace HoneyDrunk.Vault.Rotation.Tests;
 public sealed class RotationContextTests
 {
     /// <summary>
+    /// Verifies that the constructor preserves all validated rotation request fields.
+    /// </summary>
+    [Fact]
+    public void ConstructorPreservesRotationRequestFields()
+    {
+        var requestedAt = new DateTimeOffset(2026, 5, 19, 12, 0, 0, TimeSpan.Zero);
+        var metadata = new Dictionary<string, string>
+        {
+            ["rotation-mode"] = "placeholder",
+        };
+
+        var context = new RotationContext(
+            "openai",
+            "target-vault",
+            "api-key",
+            requestedAt,
+            "correlation-123",
+            metadata);
+
+        Assert.Equal("openai", context.ProviderName);
+        Assert.Equal("target-vault", context.TargetVaultName);
+        Assert.Equal("api-key", context.SecretName);
+        Assert.Equal(requestedAt, context.RequestedAtUtc);
+        Assert.Equal("correlation-123", context.CorrelationId);
+        Assert.Same(metadata, context.Metadata);
+    }
+
+    /// <summary>
     /// Verifies that rotation contexts require a populated correlation identifier.
     /// </summary>
     /// <param name="correlationId">The invalid correlation identifier.</param>
