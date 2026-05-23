@@ -4,7 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <ExcludeByFile>**/Microsoft.Azure.Functions.Worker.Sdk.Generators/**/*.g.cs</ExcludeByFile>
+          <ExcludeByFile>**/Microsoft.Azure.Functions.Worker.Sdk.Generators/**/*.g.cs,**/Program.cs</ExcludeByFile>
         </Configuration>
       </DataCollector>
     </DataCollectors>
