@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Internal
 
+- Adopted HoneyDrunk.Standards.Tests 0.2.9 for Vault.Rotation test and canary projects, removed direct test SDK / runner / coverlet references, and refreshed HoneyDrunk.Standards to 0.2.9 for ADR-0047 alignment.
 - Backfilled test coverage above the Grid PR coverage gate floor and seeded the coverage baseline ratchet artifact.
 
 ## [0.1.0] - 2026-04-25
