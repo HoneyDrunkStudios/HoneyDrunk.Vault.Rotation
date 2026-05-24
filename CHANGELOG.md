@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Enabled ADR-0044 Grid Review request workflow and repo-local OpenClaw/Codex review configuration.
+
 ### Internal
 
 - Adopted HoneyDrunk.Standards.Tests 0.2.9 for Vault.Rotation test and canary projects, removed direct test SDK / runner / coverlet references, refreshed HoneyDrunk.Standards to 0.2.9, and covered runtime bootstrap configuration for ADR-0047 alignment.
