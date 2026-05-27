@@ -11,15 +11,13 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
-  packages: write
-  id-token: write
+permissions: {}
 
 jobs:
   prepare:
     name: Prepare Release
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       version: ${{ steps.version.outputs.version }}
       version-tag: ${{ steps.version.outputs.version-tag }}
@@ -42,6 +40,11 @@ jobs:
   release:
     name: Build, Test, and Publish App Artifact
     needs: prepare
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      security-events: write
     uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/release.yml@main
     with:
       dotnet-version: '10.0.x'
