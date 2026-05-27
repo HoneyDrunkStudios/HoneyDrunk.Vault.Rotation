@@ -27,47 +27,29 @@ permissions:
 jobs:
   build:
     name: Build Function App
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Restore
-        run: dotnet restore HoneyDrunk.Vault.Rotation.slnx
-
-      - name: Build
-        run: dotnet build HoneyDrunk.Vault.Rotation.slnx -c Release --no-restore
-
-      - name: Test
-        run: dotnet test HoneyDrunk.Vault.Rotation.slnx -c Release --no-build
-
-      - name: Publish
-        run: |
-          dotnet publish src/HoneyDrunk.Vault.Rotation/HoneyDrunk.Vault.Rotation.csproj \
-            -c Release \
-            -o ./publish \
-            --no-build
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: function-app
-          path: ./publish
+    permissions:
+      contents: read
+    uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/job-dotnet-publish-artifact.yml@main
+    with:
+      dotnet-version: '10.0.x'
+      configuration: 'Release'
+      runs-on: 'ubuntu-latest'
+      project-path: HoneyDrunk.Vault.Rotation.slnx
+      publish-project: src/HoneyDrunk.Vault.Rotation/HoneyDrunk.Vault.Rotation.csproj
+      publish-output: ./publish
+      artifact-name: function-app
 
   resolve:
     name: Resolve ${{ inputs.environment || 'staging' }} config
-    needs: build
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment || 'staging' }}
     outputs:
       functions-app: ${{ vars.VAULT_ROTATION_FUNCTION_APP_NAME }}
       resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
       keyvault-name: ${{ vars.VAULT_ROTATION_KEYVAULT_NAME }}
+      azure-client-id: ${{ vars.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ vars.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
     steps:
       - name: Export environment config
         run: |
@@ -88,17 +70,17 @@ jobs:
 
   deploy:
     name: Deploy to ${{ inputs.environment || 'staging' }}
-    if: ${{ needs.resolve.outputs.functions-app != '' && needs.resolve.outputs.resource-group != '' && needs.resolve.outputs.keyvault-name != '' && vars.AZURE_CLIENT_ID != '' && vars.AZURE_TENANT_ID != '' && vars.AZURE_SUBSCRIPTION_ID != '' }}
-    needs: [resolve, deploy-gate]
+    if: ${{ needs.resolve.outputs.functions-app != '' && needs.resolve.outputs.resource-group != '' && needs.resolve.outputs.keyvault-name != '' && needs.resolve.outputs.azure-client-id != '' && needs.resolve.outputs.azure-tenant-id != '' && needs.resolve.outputs.azure-subscription-id != '' }}
+    needs: [build, resolve, deploy-gate]
     uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/job-deploy-function.yml@main
     with:
+      environment: ${{ inputs.environment || 'staging' }}
       functions-app: ${{ needs.resolve.outputs.functions-app }}
       resource-group: ${{ needs.resolve.outputs.resource-group }}
       artifact-name: function-app
       package-path: ./publish
+      azure-client-id: ${{ needs.resolve.outputs.azure-client-id }}
+      azure-tenant-id: ${{ needs.resolve.outputs.azure-tenant-id }}
+      azure-subscription-id: ${{ needs.resolve.outputs.azure-subscription-id }}
       keyvault-name: ${{ needs.resolve.outputs.keyvault-name }}
       keyvault-secrets: ''
-    secrets:
-      azure-client-id: ${{ vars.AZURE_CLIENT_ID }}
-      azure-tenant-id: ${{ vars.AZURE_TENANT_ID }}
-      azure-subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
