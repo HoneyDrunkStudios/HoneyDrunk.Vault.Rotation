@@ -20,7 +20,7 @@ jobs:
     permissions: {}
     outputs:
       version: ${{ steps.version.outputs.version }}
-      version-tag: ${{ steps.version.outputs.version-tag }}
+      version_tag: ${{ steps.version.outputs.version_tag }}
     steps:
       - name: Determine version
         id: version
@@ -35,7 +35,7 @@ jobs:
           fi
 
           echo "version=$VERSION" >>"$GITHUB_OUTPUT"
-          echo "version-tag=$VERSION_TAG" >>"$GITHUB_OUTPUT"
+          echo "version_tag=$VERSION_TAG" >>"$GITHUB_OUTPUT"
 
   release:
     name: Build, Test, and Publish App Artifact
@@ -58,7 +58,7 @@ jobs:
       publish-self-contained: false
       publish-runtime: 'linux-x64'
       create-github-release: true
-      github-release-tag: ${{ needs.prepare.outputs.version-tag }}
+      github-release-tag: ${{ needs.prepare.outputs.version_tag }}
       release-product-name: HoneyDrunk.Vault.Rotation
       release-product-description: 'Tier 2 third-party secret rotation Function App for ADR-0006.'
       release-docs-url: 'https://github.com/HoneyDrunkStudios/HoneyDrunk.Vault.Rotation#readme'
