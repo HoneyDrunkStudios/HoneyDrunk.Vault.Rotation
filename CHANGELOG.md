@@ -1,6 +1,32 @@
 # Changelog
 
+## [0.1.1] - 2026-09-26
+
+### Changed
+
+- Refresh stable NuGet dependencies; preserve target frameworks and HoneyDrunk public contracts.
+
+| Dependency | Previous | Updated |
+| --- | --- | --- |
+| Azure.Security.KeyVault.Secrets | 4.10.0 | 4.11.1 |
+| Microsoft.Azure.Functions.Worker.Sdk | 2.0.7 | 2.1.0 |
+| Microsoft.CodeAnalysis.NetAnalyzers | 10.0.202 | 10.0.401 |
+| Microsoft.Extensions.DependencyInjection | 10.0.7 | 10.0.12 |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.7 | 10.0.12 |
+| Microsoft.Extensions.Hosting | 10.0.7 | 10.0.12 |
+
+
 All notable changes to this project will be documented in this file.
+
+
+
+### Verified HoneyDrunk dependencies
+
+- HoneyDrunk.Kernel: 0.7.0 -> 0.8.1 (verified on NuGet.org).
+- HoneyDrunk.Standards: 0.2.9 -> 0.3.0 (verified on NuGet.org).
+- HoneyDrunk.Standards.Tests: 0.2.9 -> 0.3.0 (verified on NuGet.org).
+- HoneyDrunk.Vault: 0.5.0 -> 0.8.1 (verified on NuGet.org).
+- HoneyDrunk.Vault.Providers.AzureKeyVault: 0.5.0 -> 0.8.1 (verified on NuGet.org).
 
 ## [Unreleased]
 
