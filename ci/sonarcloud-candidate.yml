@@ -1,0 +1,28 @@
+# Inactive until the public project/App binding is confirmed and approved.
+# The existing SONAR_TOKEN already includes this repository. Activate as
+# .github/workflows/sonarcloud.yml; do not run automatic analysis concurrently.
+name: SonarQube Cloud
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  sonarcloud:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/job-sonarcloud.yml@9a089e333bd4d98ec4a76475f3dc861e1d05ff8b
+    with:
+      dotnet-version: '10.0.x'
+      working-directory: '.'
+      project-path: 'HoneyDrunk.Vault.Rotation.slnx'
+      sonar-organization: 'honeydrunkstudios'
+      sonar-project-key: 'honeydrunkstudios_HoneyDrunk.Vault.Rotation'
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
