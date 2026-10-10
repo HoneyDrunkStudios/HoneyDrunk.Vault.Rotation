@@ -19,3 +19,11 @@ dotnet test HoneyDrunk.Vault.Rotation.slnx -c Release --no-build
 ```
 
 Use the checked-in workflow and relevant test documentation for additional integration prerequisites, coverage and consumer checks. Do not use live resources or credentials merely to make a local check pass.
+
+## Code Review Rules
+
+Apply the [shared review criteria](https://github.com/HoneyDrunkStudios/HoneyDrunk.Standards/blob/main/HoneyDrunk.Standards/docs/CONVENTIONS.md#code-review) to changed behavior, using the repository boundaries above. Report actionable findings with the failing path, concrete impact and a small corrective action; disclose unavailable evidence. These rules grant no cross-repository access or merge authority.
+
+- Keep rotation orchestration separate from secret retrieval/configuration contracts in Vault. Verify a provider implementation exists before describing it as supported; scaffold doubles do not establish production rotation.
+- Trace overlapping schedules, retry, partial provider failure and cancellation so rotation cannot lose the last usable secret or report success before the replacement is usable. Flag secret-bearing logs and unbounded retry/access scope.
+- Require failure/recovery and repeated-invocation tests for changed rotators. Use doubles for local checks, and report unavailable provider verification; review does not authorize real rotation, schedule changes or credential operations.
