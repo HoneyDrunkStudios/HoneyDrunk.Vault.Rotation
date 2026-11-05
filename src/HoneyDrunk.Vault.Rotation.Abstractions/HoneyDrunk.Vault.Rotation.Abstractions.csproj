@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>HoneyDrunk.Vault.Rotation.Abstractions</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Description>Contracts for third-party secret rotation in the HoneyDrunk Grid.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <IncludeSymbols>true</IncludeSymbols>
