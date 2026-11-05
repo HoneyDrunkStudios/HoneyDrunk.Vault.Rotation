@@ -30,6 +30,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Update HoneyDrunk.Standards and HoneyDrunk.Standards.Tests to 0.4.1 to consume the architecture analyzer and TODO issue-link fixes.
+
 ### Changed
 
 - Enabled ADR-0044 Grid Review request workflow and repo-local OpenClaw/Codex review configuration.
