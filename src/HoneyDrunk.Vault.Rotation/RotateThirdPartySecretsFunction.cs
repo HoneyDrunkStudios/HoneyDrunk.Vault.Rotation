@@ -11,6 +11,8 @@ namespace HoneyDrunk.Vault.Rotation;
 /// <summary>
 /// Scheduled entry point for third-party secret rotation.
 /// </summary>
+/// <param name="serviceScopeFactory">The factory for a scoped rotation operation.</param>
+/// <param name="logger">The logger for this component.</param>
 public sealed class RotateThirdPartySecretsFunction(
     IServiceScopeFactory serviceScopeFactory,
     ILogger<RotateThirdPartySecretsFunction> logger)
