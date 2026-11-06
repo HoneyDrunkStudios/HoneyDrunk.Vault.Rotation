@@ -40,7 +40,11 @@ public sealed record RotationContext
     /// </summary>
     public string ProviderName
     {
-        get => _providerName;
+        get
+        {
+            return _providerName;
+        }
+
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -53,7 +57,11 @@ public sealed record RotationContext
     /// </summary>
     public string TargetVaultName
     {
-        get => _targetVaultName;
+        get
+        {
+            return _targetVaultName;
+        }
+
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -66,7 +74,11 @@ public sealed record RotationContext
     /// </summary>
     public string SecretName
     {
-        get => _secretName;
+        get
+        {
+            return _secretName;
+        }
+
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -84,7 +96,11 @@ public sealed record RotationContext
     /// </summary>
     public string CorrelationId
     {
-        get => _correlationId;
+        get
+        {
+            return _correlationId;
+        }
+
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
