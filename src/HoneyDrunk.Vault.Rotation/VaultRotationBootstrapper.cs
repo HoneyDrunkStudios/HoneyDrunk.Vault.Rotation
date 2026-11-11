@@ -4,8 +4,6 @@ using HoneyDrunk.Kernel.Hosting;
 using HoneyDrunk.Vault.Extensions;
 using HoneyDrunk.Vault.Providers.AzureKeyVault.Extensions;
 using HoneyDrunk.Vault.Rotation.Providers.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using GridEnvironments = HoneyDrunk.Kernel.Abstractions.Environments;
 
 namespace HoneyDrunk.Vault.Rotation;

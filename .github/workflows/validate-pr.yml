@@ -31,7 +31,7 @@ jobs:
       security-events: write
     uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/pr-core.yml@main
     with:
-      dotnet-version: '10.0.x'
+      dotnet-version: '11.0.100'
       configuration: 'Release'
       runs-on: 'ubuntu-latest'
       working-directory: '.'
@@ -53,7 +53,7 @@ jobs:
       checks: write
     uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/coverage-baseline-ratchet.yml@main
     with:
-      dotnet-version: '10.0.x'
+      dotnet-version: '11.0.100'
       configuration: 'Release'
       runs-on: 'ubuntu-latest'
       working-directory: '.'
