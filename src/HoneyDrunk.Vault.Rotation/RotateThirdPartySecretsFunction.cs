@@ -3,8 +3,6 @@ using HoneyDrunk.Kernel.Context;
 using HoneyDrunk.Kernel.Context.Mappers;
 using HoneyDrunk.Vault.Rotation.Abstractions;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace HoneyDrunk.Vault.Rotation;
 

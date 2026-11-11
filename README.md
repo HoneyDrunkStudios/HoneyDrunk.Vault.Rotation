@@ -43,3 +43,15 @@ When `AZURE_KEYVAULT_URI` is set, the host wires HoneyDrunk.Vault to Azure Key V
 
 - ADR-0006: Secret Rotation and Lifecycle
 - ADR-0005: Azure resource naming and per-Node vault invariants
+
+## .NET SDK
+
+Build with the .NET 11 SDK pinned in `global.json` (11.0.100, stable patch roll-forward). Runtime and test projects target `net11.0`; Abstractions retain `net10.0` alongside `net11.0` and public contract shapes are unchanged.
+
+## .NET 11 Functions migration
+
+The Functions host uses `Azure.Functions.Sdk/1.0.1` with the existing explicit Worker 2.52.0 and trigger/binding references. The new SDK owns the executable output type, Functions v4 setting, metadata generation, and worker indexing; do not re-add the former Worker.Sdk package.
+
+After a solution restore, explicitly restore the host project before a no-restore build if the SDK reports AZFW0108. Do not edit or build its generated `obj/azure_functions/azure_functions.g.csproj` directly.
+
+Before deployment, independently verify that the Azure app uses the .NET 11 isolated-worker stack and a supported hosting plan. Linux Consumption does not support .NET 10 or later. Local unit tests do not verify cloud configuration or live providers. See the [isolated worker guide](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide).
