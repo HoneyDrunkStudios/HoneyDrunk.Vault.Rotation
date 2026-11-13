@@ -24,6 +24,7 @@ jobs:
   pr-validation:
     if: github.event_name == 'pull_request'
     permissions:
+      actions: read
       contents: read
       checks: write
       pull-requests: write
